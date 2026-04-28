@@ -1,7 +1,7 @@
 pipeline {
     agent   any
 
-    envirenment {
+    environment {
         IMAGE_NAME = "chaitanyaaaa/url-shortener-api"
         TAG        = "1.${BUILD_NUMBER}"
         }
@@ -9,13 +9,13 @@ pipeline {
         stages {
             stage ("INSTALL") {
                 steps{
-                    sh ' npm install '
+                    sh 'npm install'
                     }
                 }
         
             stage ("BUILD") {
                 steps {
-                    sh ' docker build -t ${IMAGE_NAME}:${TAG} '
+                    sh 'docker build -t ${IMAGE_NAME}:${TAG} .'
                 }
             }
 
@@ -23,7 +23,7 @@ pipeline {
                 steps {
                     withCredentials([usernamePassword(credentialsId: 'DockerHub-Creds', usernameVariable: 'USER', passwordVariable: 'PASS')]) {
                     sh '''
-                        echo $PASS | docker login -u --password-stdin
+                        echo $PASS | docker login -u $USER --password-stdin
                         docker push ${IMAGE_NAME}:${TAG}
 
 		       '''
@@ -35,7 +35,7 @@ pipeline {
                     withCredentials([file (credentialsId: 'kubeconfig', variable: 'KUBECONFIG')]) {
                     	sh """
 
-                           sed -i 's|${IMAGE_NAME}:latest|${IMAGE_NAME:${TAG}|g' k8s/deployment.yml
+                           sed -i 's|${IMAGE_NAME}:latest|${IMAGE_NAME}:${TAG}|g' k8s/deployment.yml
                            kubectl apply -f k8s/
 
                            """
