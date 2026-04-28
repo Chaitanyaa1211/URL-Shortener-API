@@ -25,6 +25,8 @@ pipeline {
                     sh '''
                         echo $PASS | docker login -u --password-stdin
                         docker push ${IMAGE_NAME}:${TAG}
+
+		       '''
                    }
                 }
             }
