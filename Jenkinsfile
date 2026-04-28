@@ -3,7 +3,7 @@ pipeline {
 
     envirenment {
         IMAGE_NAME = "chaitanyaaaa/url-shortener-api"
-        TAG        = "$1.{BUILD_NUMBER}"
+        TAG        = "1.${BUILD_NUMBER}"
         }
 
         stages {
