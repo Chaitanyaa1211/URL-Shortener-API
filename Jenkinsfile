@@ -32,7 +32,7 @@ pipeline {
             }
             stage ("DEPLOY") {
                 steps {
-                    withCredentials([(file (credentialsId: 'kubeconfig', variable: 'KUBECONFIG')]) {
+                    withCredentials([file (credentialsId: 'kubeconfig', variable: 'KUBECONFIG')]) {
                     sh """
                         sed -i 's|'${IMAGE_NAME}:latest|${IMAGE_NAME:${TAG}|g' k8s/
                         kubectl apply -f k8s/
