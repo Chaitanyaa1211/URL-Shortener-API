@@ -33,12 +33,11 @@ pipeline {
             stage ("DEPLOY") {
                 steps {
                     withCredentials([file (credentialsId: 'kubeconfig', variable: 'KUBECONFIG')]) {
-                    	sh """
-
-                           sed -i 's|${IMAGE_NAME}:latest|${IMAGE_NAME}:${TAG}|g' k8s/deployment.yml
-                           kubectl apply -f k8s/
-
-                           """
+                    	sh '''
+			   helm upgrade --install url-shortener ./url-shortener \
+			   --set image.tag=${TAG} \
+			   --set replicaCount=2 
+			   '''
                     }
                 }
             }       
